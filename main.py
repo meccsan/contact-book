@@ -3,16 +3,19 @@ import os
 
 FILE_NAME = "contact-data.json"
 
+# make sure data properly loads
 def load_contacts():
+
     if not os.path.exists(FILE_NAME):
         return []
-
+    
+    # open el data
     with open(FILE_NAME, "r") as f:
         return json.load(f)
 
 def save_contacts(contacts):
-    with open(FILE_NAME, "w") as f:
-        json.dump(contacts, f, indent=4)
+    with open(FILE_NAME, "w") as f: # push out data to json file
+        json.dump(contacts, f, indent=4) # save with pretty formatting
 
 def create_contact():
     name = input("Please insert contact name: ")
@@ -21,6 +24,7 @@ def create_contact():
     other = input("Please insert other forms of contact: ")
     notes = input("Please insert notes about contact: ")
 
+    # this the shit that gets saved
     contact = {
         "contact_name": name,
         "contact_phone_number": phone_number,
@@ -39,11 +43,11 @@ def display_contacts():
     contacts = load_contacts()
 
     if not contacts:
-        print("No contacts found.")
+        print("No contacts found.") # where da fuk yo contact at?
         return
 
     for contact in contacts:
-        print("------------------")
+        print("══════════════")
         print("Name:", contact["contact_name"])
         print("Phone:", contact["contact_phone_number"])
         print("Email:", contact["contact_email"])
