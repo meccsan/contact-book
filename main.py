@@ -1,16 +1,77 @@
-# Notes for the functionality of the program
-# The program should:
-#   Allow the creation of new contacts (stored data is name, email, phone number, other forms of contact, and notes on the person)
-#   Allow the user to search for a contact by their name
-#   Allow the user to delete a contact
-#   Display all of the contacts
-#   Save all data in JSON files
-#
-# The program should NOT:
-#   Send JSON data back to me
-#   Corrupt files
-#   Perform actions without user consent
-#   Sell them ice cream
-
-import os
 import json
+import os
+
+FILE_NAME = "contact-data.json"
+
+def load_contacts():
+    if not os.path.exists(FILE_NAME):
+        return []
+
+    with open(FILE_NAME, "r") as f:
+        return json.load(f)
+
+def save_contacts(contacts):
+    with open(FILE_NAME, "w") as f:
+        json.dump(contacts, f, indent=4)
+
+def create_contact():
+    name = input("Please insert contact name: ")
+    phone_number = input("Please insert contact phone number: ")
+    email = input("Please insert contact email: ")
+    other = input("Please insert other forms of contact: ")
+    notes = input("Please insert notes about contact: ")
+
+    contact = {
+        "contact_name": name,
+        "contact_phone_number": phone_number,
+        "contact_email": email,
+        "contact_other": other,
+        "contact_notes": notes
+    }
+
+    contacts = load_contacts()
+    contacts.append(contact)
+    save_contacts(contacts)
+
+    print("Contact saved.")
+
+def display_contacts():
+    contacts = load_contacts()
+
+    if not contacts:
+        print("No contacts found.")
+        return
+
+    for contact in contacts:
+        print("------------------")
+        print("Name:", contact["contact_name"])
+        print("Phone:", contact["contact_phone_number"])
+        print("Email:", contact["contact_email"])
+
+def main():
+    while True:
+        usr_decision = input(
+            "What would you like to do (h for help): "
+        )
+
+        if usr_decision == "h":
+            print("Commands:")
+            print("h = help")
+            print("c = create contact")
+            print("a = display contacts")
+            print("q = quit")
+
+        elif usr_decision == "c":
+            create_contact()
+
+        elif usr_decision == "a":
+            display_contacts()
+
+        elif usr_decision == "q":
+            break
+
+        else:
+            print("Illegal command.")
+
+if __name__ == "__main__":
+    main()
